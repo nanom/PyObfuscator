@@ -7,7 +7,6 @@ import codecs
 import os
 import shutil
 import argparse
-from tqdm import tqdm
 from typing import List, Tuple, Dict, Any
 
 class Obfuscate:
@@ -124,7 +123,8 @@ class Obfuscate:
             program_var=self.program_var
         )
 
-        for file_path in tqdm(self.__py_files_path):
+        for file_path in self.__py_files_path:
+            print(f"File '{file_path}' ... OK")
             program_str = self.file_to_string(file_path)
             program_parts = encoder.execute(program_str)
             decoder.execute(

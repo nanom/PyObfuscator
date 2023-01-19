@@ -34,31 +34,31 @@ optional arguments:
 ## Examples of use
 #### Execute the tool to obfuscate `test.py` python file. 
 ```bash
-$ py_obfuscate.py -i test.py -o out
+$ ./py_obfuscate.py -i test.py -o out
 ```
 #### *Input file:*
 ```python
 # test.py
-print("Hellow Word!")
+print("Hello World!")
 ```
 
 #### *Output file:*
 ```python
 # out/test.py
 import base64, codecs 
-this = 'VlO0MKA0'
-is_ = 'YaO5PaOl'
-an = 'nJ50XPWV'
-simple = 'ZWxsb3cg'
-python = 'V29yZCEi'
-app = 'XD=='
+this = 'pUWco'
+is_ = 'nQoIk'
+an = 'hlbGx'
+simple = 'iVSqi'
+python = 'pzkxV'
+app = 'ik='
 encode = '\x72\x6f\x74\x31\x33' 
 code = \
-	eval('\x74\x68\x69\x73') + \
-	eval('\x63\x6f\x64\x65\x63\x73\x2e\x64\x65\x63\x6f\x64\x65\x28\x69\x73\x5f\x2c\x65\x6e\x63\x6f\x64\x65\x29') + \
+	eval('\x63\x6f\x64\x65\x63\x73\x2e\x64\x65\x63\x6f\x64\x65\x28\x74\x68\x69\x73\x2c\x65\x6e\x63\x6f\x64\x65\x29') + \
+	eval('\x69\x73\x5f') + \
 	eval('\x61\x6e') + \
 	eval('\x63\x6f\x64\x65\x63\x73\x2e\x64\x65\x63\x6f\x64\x65\x28\x73\x69\x6d\x70\x6c\x65\x2c\x65\x6e\x63\x6f\x64\x65\x29') + \
-	eval('\x70\x79\x74\x68\x6f\x6e') + \
+	eval('\x63\x6f\x64\x65\x63\x73\x2e\x64\x65\x63\x6f\x64\x65\x28\x70\x79\x74\x68\x6f\x6e\x2c\x65\x6e\x63\x6f\x64\x65\x29') + \
 	eval('\x61\x70\x70')
 eval(compile(base64.b64decode(eval('\x63\x6f\x64\x65')).decode('utf-8'),'<app>', 'exec'))
 ```
@@ -66,12 +66,12 @@ eval(compile(base64.b64decode(eval('\x63\x6f\x64\x65')).decode('utf-8'),'<app>',
 ## Encoding explication
 1. The original code is partitioned and encoded in `base64` between the 6 variables **`this`**, **`is_`** ,**`an`** ,**`simple`** ,**`python`**, and **`app`**.
 ```python
-this = 'VlO0MKA0'
-is_ = 'YaO5PaOl'
-an = 'nJ50XPWV'
-simple = 'ZWxsb3cg'
-python = 'V29yZCEi'
-app = 'XD=='
+this = 'pUWco'
+is_ = 'nQoIk'
+an = 'hlbGx'
+simple = 'iVSqi'
+python = 'pzkxV'
+app = 'ik='
 ```
 2. The 7th variable **`encode`** contains the name of the encryption method (in hexadecimal string) used to encode, with a probability of .6, the content of any of the above variables.
 ```python
@@ -80,11 +80,11 @@ encode = '\x72\x6f\x74\x31\x33'
 3. The 8th variable **`code`**, contains the concatenation of the results of several calls to `eval()`. Each of the inputs to `eval()` are encoded in hexadecimal string so as not to be human readable.  Specifically the actual decoded arguments are:
 ```python
 code = \
-    eval(this) + \
-    eval(codecs.decode(is_, encode)) + \
+    eval(codecs.decode(this, encode)) + \
+    eval(is_) + \
     eval(an) + \
     eval(codecs.decode(simple, encode)) + \
-    eval(python) + \
+    eval(codecs.decode(python, encode)) + \
     eval(app)
 ```
 
