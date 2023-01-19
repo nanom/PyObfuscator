@@ -1,4 +1,5 @@
 #!/usr/bin/env python3.9
+
 import base64
 import math
 import random
@@ -175,7 +176,7 @@ class Encoder:
         string: str
     ) -> str:
 
-        return base64.b64encode(string.encode()).decode()
+        return base64.b64encode(string.encode('utf-8')).decode('utf-8')
 
     def base64_to_custom_encoding(
         self, 
@@ -267,50 +268,49 @@ class Decoder:
         # Write the encoding program's parts
         for k, _ in program_parts.items():
             encode_part = self.__get_program_part(k, 'base64_encode')
-            to_write = f"{k}= '{encode_part}'\n"
+            to_write = f"{k} = '{encode_part}'\n"
             self.__write(file_path, to_write)
 
         # Write custom encoding method var
         hex_name = self.str_to_hex(encoding_method)
-        to_write = f"{self.encoding_var}='{hex_name}' \n"
+        to_write = f"{self.encoding_var} = '{hex_name}' \n"
         self.__write( file_path, to_write)
 
         # Write encoding program var
-        to_write = f"{self.program_var}="
+        to_write = f"{self.program_var} = \\\n"
         for ith, (k,v) in enumerate(program_parts.items()):
             if v[encoding_method]:
                 cmd = f"codecs.decode({k},{self.encoding_var})"
                 hex_cmd = self.str_to_hex(cmd)
-                to_write += f"eval('{hex_cmd}')"
+                to_write += f"\teval('{hex_cmd}')"
             else:
-                to_write += f"eval('{v['hex']}')"
+                to_write += f"\teval('{v['hex']}')"
             
             if ith != len(program_parts) - 1:
-                to_write += f" + "
+                to_write += f" + \\\n"
         
         self.__write(file_path, to_write)
 
         # Write cmd to decode program
         hex_name = self.str_to_hex(self.program_var)
-        cmd = f"base64.b64decode(eval('{hex_name}')).decode()"
+        cmd = f"base64.b64decode(eval('{hex_name}')).decode('utf-8')"
         to_write = f"\neval(compile({cmd},'<app>', 'exec'))"
         self.__write(file_path, to_write)
 
 def getArguments():
     ap = argparse.ArgumentParser(
-        prog="Obfuscator v.0",
-        description="Tool to obfuscate python programs", 
-        usage="./py_encoder -i <input_path> [-o <output_dir_name>]"
+        prog="./py_obfuscate.py",
+        description="PyObfuscator is a basic command line tool that allows you to obfuscate not only simple Python scripts, but also full Python programs.", 
     )
     ap.add_argument("-i","--input", 
         required=True, 
         type=str, 
-        help="Enter filename or program directory path."
+        help="Enter python filename or python program directory path."
     )
     ap.add_argument("-o","--output", 
         type=str,
         default="output",
-        help="Enter output directory name, where the obfuscated program will be saved."
+        help="Enter an output directory name, where the obfuscated program will be saved. (Default='output')."
     )
     return vars(ap.parse_args())
 
