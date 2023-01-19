@@ -2,8 +2,8 @@
 PyObfuscator is a basic command line tool that allows you to obfuscate not only simple Python scripts, but entire Python programs recursively. Its process is based on base64 encoding and random encryption using different methods from the `codecs` library, as well as the use of transformations of both variable names and certain types of commands to hexadecimal strings.
 
 
-> **Background:** *Obfuscation is the act of creating source code that is difficult for humans to understand. The code is often obfuscated to protect intellectual property or trade secret, or sometimes we may find ourselves in the situation where we need to provide the code directly to a client without losing control of our code, avoiding accidental modifications that could turn it back. obsolete.
-The obfuscation technique, unlike code encryption, allows the program to continue to be executed, without the need to carry out a prior decryption procedure.*
+> **Background:** Obfuscation is the act of creating source code that is difficult for humans to understand. The code is often obfuscated to protect intellectual property or trade secret, or sometimes we may find ourselves in the situation where we need to provide the code directly to a client without losing control of our code, avoiding accidental modifications that could turn it back. obsolete.
+The obfuscation technique, unlike code encryption, allows the program to continue to be executed, without the need to carry out a prior decryption procedure.
 
 ## Instalation
 ```bash
