@@ -63,7 +63,7 @@ code = \
 eval(compile(base64.b64decode(eval('\x63\x6f\x64\x65')).decode('utf-8'),'<app>', 'exec'))
 ```
 
-## Encoding explication
+## Deobfuscation: Reverse Engineering
 1. The original code is partitioned and encoded in `base64` between the 6 variables **`this`**, **`is_`** ,**`an`** ,**`simple`** ,**`python`**, and **`app`**.
 ```python
 this = 'pUWco'
