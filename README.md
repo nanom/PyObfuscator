@@ -95,3 +95,5 @@ code = \
 ```python
 eval(compile(base64.b64decode(eval('\x63\x6f\x64\x65')).decode('utf-8'),'<app>', 'exec'))
 ```
+
+> **DISCLAIMER**: This program was developed for educational purposes only and it is **NOT** intended to be used in any malicious way. I decline any responsibility for what you do with it.
