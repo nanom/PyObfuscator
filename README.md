@@ -63,8 +63,8 @@ code = \
 eval(compile(base64.b64decode(eval('\x63\x6f\x64\x65')).decode('utf-8'),'<app>', 'exec'))
 ```
 
-## Encoding explication
-1. The original code is partitioned and encoded in `base64` between the 6 variables **`this`**, **`is_`** ,**`an`** ,**`simple`** ,**`python`**, and **`app`**.
+## Deobfuscation: Reverse Engineering
+1. The original code is partitioned and encoded in `base64` between the variables **`this`**, **`is_`** ,**`an`** ,**`simple`** ,**`python`**, and **`app`**.
 ```python
 this = 'pUWco'
 is_ = 'nQoIk'
@@ -73,11 +73,11 @@ simple = 'iVSqi'
 python = 'pzkxV'
 app = 'ik='
 ```
-2. The 7th variable **`encode`** contains the name of the encryption method (in hexadecimal string) used to encode, with a probability of .6, the content of any of the above variables.
+2. The variable **`encode`** contains the name of the encryption method (in hexadecimal string) used to encode, with a probability of .6, the content of any of the above variables.
 ```python
 encode = '\x72\x6f\x74\x31\x33' 
 ```
-3. The 8th variable **`code`**, contains the concatenation of the results of several calls to `eval()`. Each of the inputs to `eval()` are encoded in hexadecimal string so as not to be human readable.  Specifically the actual decoded arguments are:
+3. The last variable **`code`**, contains the concatenation of the results of several calls to `eval()`. Each of the inputs to `eval()` are encoded in hexadecimal string.  Specifically the actual decoded arguments are:
 ```python
 code = \
     eval(codecs.decode(this, encode)) + \
@@ -88,7 +88,7 @@ code = \
     eval(app)
 ```
 
-4. The final content of the **`code`** variable is a *base64-encoded string*. This is finally decoded using the `base64.b64decode()` command, compiled, and evaluated.
+4. The final content of the **`code`** variable is a base64-encoded string. This is finally decoded using the `base64.b64decode()` command, compiled, and evaluated.
 ```python
 eval(compile(base64.b64decode(eval('\x63\x6f\x64\x65')).decode('utf-8'),'<app>', 'exec'))
 ```
