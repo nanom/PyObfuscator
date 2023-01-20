@@ -300,14 +300,15 @@ class Decoder:
 def getArguments():
     ap = argparse.ArgumentParser(
         prog="./py_obfuscate.py",
-        description="PyObfuscator is a basic command line tool that allows you to obfuscate not only simple Python scripts, but also full Python programs.", 
+        description="PyObfuscator is a basic command line tool that allows you to obfuscate Python code.", 
     )
     ap.add_argument("-i","--input", 
-        required=True, 
+        required=True,
         type=str, 
-        help="Enter python filename or python program directory path."
+        help="Enter python filename or directory path."
     )
     ap.add_argument("-o","--output", 
+        required=False,
         type=str,
         default="output",
         help="Enter an output directory name, where the obfuscated program will be saved. (Default='output')."
