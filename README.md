@@ -1,7 +1,7 @@
 # PyObfuscator
 
 ## Description
-PyObfuscator is a basic command line tool that allows you to obfuscate not just a simple Python script, but also entire programs recursively. This tool is based on base64 encoding and random re-encode of some parts of the code using some an choiced method of the `codecs` library. It also performs transformations of variable names and specific commands to hexadecimal strings.
+PyObfuscator is a basic command line tool that allows you to obfuscate not just a simple Python script, but also entire programs recursively. This tool is based on base64 encoding and random re-encode of some parts of the code using the 'Rot13' [Caesar cipher](https://en.wikipedia.org/wiki/ROT13), an encode method include in the `codecs` library. It also performs transformations of variable names and specific commands to hexadecimal strings.
 
 > **Background:** Obfuscation is the act of creating source code that is difficult for humans to understand. Many times the code is obfuscated to protect intellectual property or trade secrets, and on other occasions to not lose control of our code, avoiding accidental modifications that could break it.
 The obfuscation technique, unlike code encryption, allows the program to continue running, without the need for a prior decryption procedure.
@@ -19,7 +19,7 @@ $ sudo ln -s <you_absolute_path>/py_ofuscator.py /usr/local/bin/.
 ```
 ## How to use
 ```shell
-usage: ./py_obfuscate.py [-h] -i INPUT_PATH [-o OUTPUT_DIR] [-v CONTENT_VARS] [-e ENCODING_METHOD]
+usage: ./py_obfuscate.py [-h] -i INPUT_PATH [-o OUTPUT_DIR] [-v CONTENT_VARS]
 
 PyObfuscator is a basic command line tool that allows you to obfuscate Python code.
 
@@ -32,9 +32,6 @@ optional arguments:
   -v CONTENT_VARS, --content_vars CONTENT_VARS
                         Enter list of variables in which the program will be partitioned.(Default='this, is_, an, simple,
                         python, app')
-  -e ENCODING_METHOD, --encoding_method ENCODING_METHOD
-                        Name of the method used to re-encode the content of some content_vars via the codecs py-library.
-                        (Default='rot13')
 ```
 
 ## Examples of use
@@ -79,7 +76,7 @@ simple = 'iVSqi'
 python = 'pzkxV'
 app = 'ik='
 ```
-2. The variable **`encode`** contains the name of the encoding method (in hexadecimal string) used to re-encode the content of some above variables, with a probability of .6. (This method can also be configured via the **--encoding_method** command line parameter.)
+2. The variable **`encode`** contains the name of the encoding method in hexadecimal string ('rot13') used to re-encode the content of some above variables, with a probability of .6.
 ```python
 encode = '\x72\x6f\x74\x31\x33' 
 ```

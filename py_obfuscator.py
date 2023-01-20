@@ -15,18 +15,17 @@ class Obfuscate:
         input_path: str,
         output_dir_name:str = None,
         content_vars:List[str] = ['this', 'is_', 'an', 'simple', 'python','app'],
-        program_var:str = "code",
-        encoding_var:str = "encode",
-        encoding_method:str ='rot13',
     ) -> None:
 
         assert(output_dir_name is not None), "Error the 'output_dir_name' is empty!"
         self.out_dir_path = os.path.join(os.getcwd(), output_dir_name)
 
         self.content_vars = content_vars
-        self.encoding_var = encoding_var
-        self.program_var = program_var
-        self.encoding_method = encoding_method
+        self.program_var = "code"
+        self.encoding_var = "encode"
+
+        # At now, only work with 'rot13' Caesar cipher.
+        self.encoding_method = 'rot13'
 
         self.__all_files_path = None
         self.__py_files_path = None
@@ -319,24 +318,15 @@ def getArguments():
         default="this, is_, an, simple, python, app",
         help="Enter list of variables in which the program will be partitioned.(Default='this, is_, an, simple, python, app')"
     )
-    ap.add_argument("-e","--encoding_method", 
-        required=False,
-        type=str,
-        default="rot13",
-        help="Name of the method used to re-encode the content of some content_vars via the codecs py-library. (Default='rot13')"
-    )
 
     return vars(ap.parse_args())
 
+
 if __name__ == '__main__':
     args = getArguments()
-    input_path = args['input_path']
-    output_dir_name = args['output_dir']
-    content_vars = [v for v in args['content_vars'].split(',') if v != ""]
-    
     obf = Obfuscate(
-        input_path=input_path,
-        output_dir_name=output_dir_name,
-        content_vars=content_vars
+        input_path = args['input_path'],
+        output_dir_name = args['output_dir'],
+        content_vars = [v.strip() for v in args['content_vars'].split(',') if v != ""]
     )
     obf.execute()
