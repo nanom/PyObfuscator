@@ -13,15 +13,15 @@ class Obfuscate:
     def __init__(
         self, 
         input_path: str,
-        out_dir_name:str = None,
+        output_dir_name:str = None,
         content_vars:List[str] = ['this', 'is_', 'an', 'simple', 'python','app'],
         program_var:str = "code",
         encoding_var:str = "encode",
         encoding_method:str ='rot13',
     ) -> None:
 
-        assert(out_dir_name is not None), "Error the 'out_dir_name' is empty!"
-        self.out_dir_path = os.path.join(os.getcwd(), out_dir_name)
+        assert(output_dir_name is not None), "Error the 'output_dir_name' is empty!"
+        self.out_dir_path = os.path.join(os.getcwd(), output_dir_name)
 
         self.content_vars = content_vars
         self.encoding_var = encoding_var
@@ -302,23 +302,41 @@ def getArguments():
         prog="./py_obfuscate.py",
         description="PyObfuscator is a basic command line tool that allows you to obfuscate Python code.", 
     )
-    ap.add_argument("-i","--input", 
+    ap.add_argument("-i","--input_path", 
         required=True,
         type=str, 
         help="Enter python filename or directory path."
     )
-    ap.add_argument("-o","--output", 
+    ap.add_argument("-o","--output_dir", 
         required=False,
         type=str,
         default="output",
         help="Enter an output directory name, where the obfuscated program will be saved. (Default='output')."
     )
+    ap.add_argument("-v","--content_vars", 
+        required=False,
+        type=str,
+        default="this, is_, an, simple, python, app",
+        help="Enter list of variables in which the program will be partitioned.(Default='this, is_, an, simple, python, app')"
+    )
+    ap.add_argument("-e","--encoding_method", 
+        required=False,
+        type=str,
+        default="rot13",
+        help="Name of the method used to re-encode the content of some content_vars via the codecs py-library. (Default='rot13')"
+    )
+
     return vars(ap.parse_args())
 
 if __name__ == '__main__':
     args = getArguments()
+    input_path = args['input_path']
+    output_dir_name = args['output_dir']
+    content_vars = [v for v in args['content_vars'].split(',') if v != ""]
+    
     obf = Obfuscate(
-        input_path=args['input'],
-        out_dir_name=args['output']
+        input_path=input_path,
+        output_dir_name=output_dir_name,
+        content_vars=content_vars
     )
     obf.execute()
