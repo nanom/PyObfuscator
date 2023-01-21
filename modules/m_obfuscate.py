@@ -82,7 +82,7 @@ class Obfuscate:
     
     def __gen_new_var_name(
         self, 
-        size: int = 5
+        size: int = 6
     ) -> str:
 
         bag = string.digits + string.ascii_letters
@@ -95,7 +95,7 @@ class Obfuscate:
     ) -> List[str]:
 
         min_vars_availables = 1
-        max_vars_availables = int(program_size/4)
+        max_vars_availables = 10
 
         if self.program_vars is None:
                 n = random.randint(min_vars_availables, max_vars_availables + 1)
@@ -113,7 +113,7 @@ class Obfuscate:
                 self.program_vars = [
                     var_name.strip() 
                     for ith, var_name in enumerate(self.program_vars) 
-                    if var_name.strip() != "" and ith <= max_vars_availables
+                    if var_name.strip() != "" and ith < program_size
                 ]
 
             else:
