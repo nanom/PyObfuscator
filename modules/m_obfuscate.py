@@ -89,19 +89,20 @@ class Obfuscate:
         var_name = random.choice(string.ascii_letters) + ''.join(random.choice(bag) for _ in range(size - 1))
         return var_name
 
-    def __get_content_vars(
+    def __get_program_vars(
         self,
         program_size: int
     ) -> List[str]:
 
         min_vars_availables = 1
-        max_vars_availables = 10
+        max_vars_availables = 15
 
         if self.program_vars is None:
                 n = random.randint(min_vars_availables, max_vars_availables + 1)
                 self.program_vars = [
                     self.__gen_new_var_name()
-                    for _ in range(0, n)
+                    for _ in range(0, n) 
+                    if n < program_size
                 ]
         else:
             # Checking that each vars does not start with a numeric character
@@ -158,7 +159,7 @@ class Obfuscate:
             
             program_str = self.file_to_string(file_path)
             encoder = Encoder(
-                program_vars=self.__get_content_vars(len(program_str)),
+                program_vars=self.__get_program_vars(len(program_str)),
                 encoding_method=self.encoding_method
             )
             
