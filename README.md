@@ -19,7 +19,7 @@ $ sudo ln -s <you_absolute_path>/py_ofuscator.py /usr/local/bin/.
 ```
 ## How to use
 ```shell
-usage: ./py_obfuscate.py [-h] -i INPUT_PATH [-o OUTPUT_DIR] [-v CONTENT_VARS]
+usage: ./py_obfuscate.py [-h] -i INPUT_PATH [-o OUTPUT_DIR] [-v PROGRAM_VARS]
 
 PyObfuscator is a basic command line tool that allows you to obfuscate Python code.
 
@@ -29,9 +29,9 @@ optional arguments:
                         Enter python filename or directory path.
   -o OUTPUT_DIR, --output_dir OUTPUT_DIR
                         Enter an output directory name, where the obfuscated program will be saved. (Default='output').
-  -v CONTENT_VARS, --content_vars CONTENT_VARS
-                        Enter list of variables in which the program will be partitioned.(Default='this, is_, an, simple,
-                        python, app')
+  -v PROGRAM_VARS, --program_vars PROGRAM_VARS
+                        Enter a list of variable names into which the program will be divided (eg var1, var2, var3). 
+                        If you don't enter anything, the tool will generate random names for you.
 ```
 
 ## Examples of use
