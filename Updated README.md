@@ -46,10 +46,10 @@ required arguments:
 #### Execute the tool to obfuscate `test.py` python file. 
 ```bash
 $ ./py_obfuscate.py \
-    -i test.py 
-    -o out
-    -pv this,is_,an,simple,python,app
-    -ev encode
+    -i test.py \
+    -o out \
+    -pv this,is_,an,simple,python,app \
+    -ev encode \
     -xv code
 ```
 #### *Input file:*
