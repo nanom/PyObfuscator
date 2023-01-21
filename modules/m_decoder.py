@@ -5,15 +5,15 @@ from typing import Dict, Any
 class Decoder:
     def __init__(
         self,
-        out_dir_path: str,
+        output_dir_path: str,
         encoding_var: str,
         execute_var: str
     ) -> None:
 
-        self.out_dir_path = out_dir_path
+        self.output_dir_path = output_dir_path
         self.encoding_var = encoding_var
         self.execute_var = execute_var
-        self.program_parts = None
+        self.program_struct = None
 
     def __write(
         self, 
@@ -21,18 +21,18 @@ class Decoder:
         value: str
     ) -> None:
 
-        d_path = os.path.join(self.out_dir_path, file_path)
+        d_path = os.path.join(self.output_dir_path, file_path)
 
         with open(d_path, 'a+') as f:
             f.write(value)
 
-    def __get_program_part(
+    def __get_program_struct(
         self, 
         var: str, 
         feature: str
     ) -> Any:
 
-        return self.program_parts[var][feature]
+        return self.program_struct[var][feature]
 
     def str_to_hex(
         self, 
@@ -44,12 +44,12 @@ class Decoder:
     def execute(
         self, 
         file_path: str,
-        program_parts: Dict,
+        program_struct: Dict,
         encoding_method: str
     ) -> None:
 
-        # Set program_parts as class vars
-        self.program_parts = program_parts
+        # Set program_struct as class vars
+        self.program_struct = program_struct
 
         # Write the necessary libraries
         self.__write(
@@ -58,8 +58,8 @@ class Decoder:
         )
 
         # Write the encoding program's parts
-        for k, _ in program_parts.items():
-            encode_part = self.__get_program_part(k, 'base64_encode')
+        for k, _ in program_struct.items():
+            encode_part = self.__get_program_struct(k, 'base64_encode')
             to_write = f"{k} = '{encode_part}'\n"
             self.__write(file_path, to_write)
 
@@ -70,7 +70,7 @@ class Decoder:
 
         # Write encoding program var
         to_write = f"{self.execute_var} = \\\n"
-        for ith, (k,v) in enumerate(program_parts.items()):
+        for ith, (k,v) in enumerate(program_struct.items()):
             if v[encoding_method]:
                 cmd = f"codecs.decode({k},{self.encoding_var})"
                 hex_cmd = self.str_to_hex(cmd)
@@ -78,7 +78,7 @@ class Decoder:
             else:
                 to_write += f"\teval('{v['hex']}')"
             
-            if ith != len(program_parts) - 1:
+            if ith != len(program_struct) - 1:
                 to_write += f" + \\\n"
         
         self.__write(file_path, to_write)

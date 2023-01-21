@@ -8,21 +8,35 @@ def getArguments():
         prog="./py_obfuscate.py",
         description="PyObfuscator is a basic command line tool that allows you to obfuscate Python code.", 
     )
-    ap.add_argument("-i","--input_path", 
+    req_args = ap.add_argument_group("required arguments")
+    req_args.add_argument("-i","--input_path", 
         required=True,
         type=str, 
-        help="Enter python filename or directory path."
+        help="Python filename or program directory name."
     )
     ap.add_argument("-o","--output_dir", 
         required=False,
         type=str,
         default="output",
-        help="Enter an output directory name, where the obfuscated program will be saved. (Default='output')."
+        help="Name of te output directory where the obfuscated program will be saved (default: %(default)s)."
     )
-    ap.add_argument("-v","--program_vars", 
+    ap.add_argument("-pv","--program_vars", 
         required=False,
+        default=None,
         type=str,
-        help="Enter a list of variable names into which the program will be divided (eg var1, var2, var3). Otherwise, the tool will generate random names for you."
+        help="List of variable names where the program will be divided (e.g: var1,var2,...,varN). Otherwise, the tool will generate random number of names for you."
+    )
+    ap.add_argument("-ev","--encoding_var", 
+        required=False,
+        default=None,
+        type=str,
+        help="Name of variable where the name of the re-encoding method will be stored. Otherwise. Otherwise, the tool will generate a random name for you."
+    )
+    ap.add_argument("-xv","--execute_var", 
+        required=False,
+        default=None,
+        type=str,
+        help="Name of variable where the decoded program will be stored and executed. Otherwise, the tool will generate a random name for you."
     )
 
     return vars(ap.parse_args())
@@ -39,5 +53,6 @@ if __name__ == '__main__':
         input_path = args.get('input_path'),
         output_dir_name = args.get('output_dir'),
         program_vars = program_vars
+        
     )
     obf.execute()

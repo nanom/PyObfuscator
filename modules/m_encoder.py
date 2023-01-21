@@ -11,33 +11,33 @@ class Encoder:
         encoding_method: str
     ) -> None:
 
-        self.program_parts = {var.strip():{} for var in program_vars if var != ""}
+        self.program_struct = {var.strip():{} for var in program_vars if var != ""}
         self.encoding_method = encoding_method
 
-    def __get_chunk_idxs(
+    def __get_chunks_idx(
         self, 
         str: str
     ) -> List[Tuple[int, int]]:
 
-        code_size = len(str) 
-        chunk = len(self.program_parts)
-        chunk_size = int(code_size / chunk) 
+        program_size = len(str) 
+        n_chunk = len(self.program_struct)
+        chunk_size = int(program_size / n_chunk) 
         idx = []
-        for i in range(0, chunk*chunk_size, chunk_size):
+        for i in range(0, n_chunk*chunk_size, chunk_size):
             e = i + chunk_size
-            if e == chunk * chunk_size:
-                e = code_size
+            if e == n_chunk * chunk_size:
+                e = program_size
             idx.append((i,e))
         return idx
     
-    def __set_program_part(
+    def __set_program_struct(
         self, 
         var: str, 
         feature: str, 
         value: Any
     ) -> None:
 
-        self.program_parts[var][feature] = value
+        self.program_struct[var][feature] = value
 
     def str_to_hex(
         self, 
@@ -66,21 +66,21 @@ class Encoder:
     ) -> Dict:
 
         # Encode in base65 the original str program
-        b64_program = self.str_to_base64(program_str)
+        program_b64 = self.str_to_base64(program_str)
 
         # Get boundaries to divide the encoded program in len(program_parts) parts
-        idxs = self.__get_chunk_idxs(b64_program)
+        idx = self.__get_chunks_idx(program_b64)
 
-        for ith, (k,_) in enumerate(self.program_parts.items()):
-            current_part = b64_program[ idxs[ith][0]:idxs[ith][1] ]
-            self.__set_program_part(k,'hex', self.str_to_hex(k))
-            self.__set_program_part(k,'base64_encode', current_part)
+        for ith, (k,_) in enumerate(self.program_struct.items()):
+            current_part = program_b64[ idx[ith][0]:idx[ith][1] ]
+            self.__set_program_struct(k,'hex', self.str_to_hex(k))
+            self.__set_program_struct(k,'base64_encode', current_part)
 
             # Re-Encode the current part with a probability of .6, using encoding_method
             if random.random() >= .6:
-                self.__set_program_part(k,'base64_encode', self.base64_to_custom_encoding(current_part))
-                self.__set_program_part(k,self.encoding_method, True)
+                self.__set_program_struct(k,'base64_encode', self.base64_to_custom_encoding(current_part))
+                self.__set_program_struct(k,self.encoding_method, True)
             else:
-                self.__set_program_part(k,self.encoding_method, False)
+                self.__set_program_struct(k,self.encoding_method, False)
 
-        return self.program_parts
+        return self.program_struct

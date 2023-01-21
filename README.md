@@ -19,25 +19,38 @@ $ sudo ln -s <you_absolute_path>/py_ofuscator.py /usr/local/bin/.
 ```
 ## How to use
 ```shell
-usage: ./py_obfuscate.py [-h] -i INPUT_PATH [-o OUTPUT_DIR] [-v PROGRAM_VARS]
+usage: ./py_obfuscate.py [-h] -i INPUT_PATH [-o OUTPUT_DIR] [-pv PROGRAM_VARS] [-ev ENCODING_VAR] [-xv EXECUTE_VAR]
 
 PyObfuscator is a basic command line tool that allows you to obfuscate Python code.
 
 optional arguments:
   -h, --help            show this help message and exit
-  -i INPUT_PATH, --input_path INPUT_PATH
-                        Enter python filename or directory path.
   -o OUTPUT_DIR, --output_dir OUTPUT_DIR
-                        Enter an output directory name, where the obfuscated program will be saved. (Default='output').
-  -v PROGRAM_VARS, --program_vars PROGRAM_VARS
-                        Enter a list of variable names into which the program will be divided (eg var1, var2, var3). 
-                        If you don't enter anything, the tool will generate random names for you.
+                        Name of te output directory where the obfuscated program will be saved (default: output).
+  -pv PROGRAM_VARS, --program_vars PROGRAM_VARS
+                        List of variable names where the program will be divided (e.g: var1,var2,...,varN). Otherwise, the tool
+                        will generate random number of names for you.
+  -ev ENCODING_VAR, --encoding_var ENCODING_VAR
+                        Name of variable where the name of the re-encoding method will be stored. Otherwise. Otherwise, the
+                        tool will generate a random name for you.
+  -xv EXECUTE_VAR, --execute_var EXECUTE_VAR
+                        Name of variable where the decoded program will be stored and executed. Otherwise, the tool will
+                        generate a random name for you.
+
+required arguments:
+  -i INPUT_PATH, --input_path INPUT_PATH
+                        Python filename or program directory name.
 ```
 
 ## Examples of use
 #### Execute the tool to obfuscate `test.py` python file. 
 ```bash
-$ ./py_obfuscate.py -i test.py -o out
+$ ./py_obfuscate.py \
+    -i test.py 
+    -o out
+    -pv this,is_,an,simple,python,app
+    -ev encode
+    -xv code
 ```
 #### *Input file:*
 ```python
