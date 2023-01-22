@@ -2,9 +2,10 @@ import random
 import os
 import shutil
 import string
+import sys
 from typing import List
-from modules.m_decoder import Decoder
 from modules.m_encoder import Encoder
+from modules.m_decoder import Decoder
 
 
 class Obfuscate:
@@ -12,19 +13,17 @@ class Obfuscate:
         self, 
         input_path: str,
         output_dir_name: str = None,
-        program_vars: List[str] = None,
-        encoding_var: str = None,
-        execute_var: str = None
+        program_vars: List[str] = None
     ) -> None:
 
         self.input_path = input_path
         self.output_dir_path = output_dir_name
         self.program_vars = program_vars
-        self.encoding_var = encoding_var
-        self.execute_var = execute_var
 
         # At now, only work with 'rot13' Caesar cipher.
         self.encoding_method = 'rot13'
+        self.encoding_var = None
+        self.execute_var = None
 
         self.__all_files_path = None
         self.__py_files_path = None
@@ -36,13 +35,17 @@ class Obfuscate:
         self, 
     ) -> None:
 
+        # --- Checking input path ---
         if not os.path.exists(self.input_path):
-            raise Exception(f"Error. The input path '{self.input_path}' doesn't exists!")
+            sys.exit(f"Error. The INPUT path '{self.input_path}' doesn't exists!")
         
+        # --- Checking output path ---
         if self.output_dir_path is None:
-            raise Exception("Error. The parameter 'output_dir_name' can't be empty!")
+            sys.exit("Error. The parameter 'OUTPUT_DIR_NAME' can't be empty!")
         
+        # --- Checking input program_list vars names ---
         if self.program_vars is not None:
+
             # Checking that each name doesn't start with a numeric character.
             all_names_are_correctly = True
 
@@ -50,13 +53,11 @@ class Obfuscate:
                 all_names_are_correctly = all_names_are_correctly and name.strip()[0].isalpha()
             
             if not all_names_are_correctly:
-                raise Exception("Error: Each variable name in `program_vars` must start with an alphabetic  character!")
-        
-        if self.encoding_var is None:
-            self.encoding_var = self.__gen_name(10)
-        
-        if self.execute_var is None:
-            self.execute_var = self.__gen_name(10)
+                sys.exit("Error: Variable names entered in `PROGRAM_VARS` parameter must start with an alphabetic character!")
+
+            # Checking that list have at least three names
+            if len(self.program_vars) < 3:
+                sys.exit("Error: The parameter `PROGRAM_VARS` must be a list of strings with at least three names!")
 
     def __create_output_paths(
         self
@@ -122,21 +123,32 @@ class Obfuscate:
     ) -> List[str]:
 
         min_n_vars = 1
-        max_n_vars = 10
+        max_n_vars = 7
 
         if self.program_vars is None:
             n = random.randint(min_n_vars, max_n_vars)
+            
+            # Generate list of variables name
             self.program_vars = [
-                self.__gen_name()
+                self.__new_name()
                 for _ in range(0, n) 
                 if n < program_size
             ]
+
+            # Generate random names to `self.encoding_var` and `self.execute_var`
+            self.execute_var = self.__new_name()
+            self.encoding_var = self.__new_name()
         else:
             self.program_vars = [
                 var_name.strip() 
                 for ith, var_name in enumerate(self.program_vars) 
                 if var_name.strip() != "" and ith < program_size
             ]
+
+            # Assign the last 2 names of the self.program_vars to `self.encoding_var` and `self.execute_var`
+            self.encoding_var = self.program_vars[-2]
+            self.execute_var = self.program_vars[-1]
+            self.program_vars = self.program_vars[:-2] 
 
         return self.program_vars
     
@@ -150,15 +162,15 @@ class Obfuscate:
             str_code = f.read()
         return str_code
 
-    def __gen_name(
+    def __new_name(
         self, 
-        size: int = 6
+        length: int = 7
     ) -> str:
 
         bag = string.digits + string.ascii_letters
         var_name = \
             random.choice(string.ascii_letters) + \
-            ''.join(random.choice(bag) for _ in range(size - 1))
+            ''.join(random.choice(bag) for _ in range(length - 1))
         
         return var_name
 
@@ -180,4 +192,4 @@ class Obfuscate:
             
             print(f"File '{file_path}' ... OK")
 
-        print(f"{len(self.__py_files_path)} files have been successfully obfuscated!")
+        print(f"The files have been successfully obfuscated in '{self.output_dir_path}' !")

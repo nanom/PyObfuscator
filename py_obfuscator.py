@@ -20,25 +20,12 @@ def getArguments():
         default="output",
         help="Name of te output directory where the obfuscated program will be saved (default: %(default)s)."
     )
-    ap.add_argument("-pv","--program_vars", 
+    ap.add_argument("-v","--program_vars", 
         required=False,
         default=None,
         type=str,
-        help="List of variable names where the program will be divided (e.g: var1,var2,...,varN). Otherwise, the tool will generate random number of names for you."
+        help="Please list at least three variable names where the program will be split (eg: n1,n2,n3,...,nN). Otherwise, random names will be generated for you."
     )
-    ap.add_argument("-ev","--encoding_var", 
-        required=False,
-        default=None,
-        type=str,
-        help="Name of variable where the name of the re-encoding method will be stored. Otherwise. Otherwise, the tool will generate a random name for you."
-    )
-    ap.add_argument("-xv","--execute_var", 
-        required=False,
-        default=None,
-        type=str,
-        help="Name of variable where the decoded program will be stored and executed. Otherwise, the tool will generate a random name for you."
-    )
-
     return vars(ap.parse_args())
 
 
@@ -49,10 +36,10 @@ if __name__ == '__main__':
     if program_vars is not None:
         program_vars = [var_name for var_name in program_vars.split(",") if var_name != ""]
 
-    obf = Obfuscate(
+    ob = Obfuscate(
         input_path = args.get('input_path'),
         output_dir_name = args.get('output_dir'),
         program_vars = program_vars
         
     )
-    obf.execute()
+    ob.execute()
