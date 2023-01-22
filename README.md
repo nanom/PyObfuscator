@@ -1,12 +1,12 @@
 # PyObfuscator
 
-## Description
+## Description.
 PyObfuscator is a basic command line tool that allows you to obfuscate not just a simple Python script, but also entire programs recursively. This tool is based on base64 encoding and random re-encode of some parts of the code using the 'Rot13' [Caesar cipher](https://en.wikipedia.org/wiki/ROT13), an encode method include in the `codecs` library. It also performs transformations of variable names and specific commands to hexadecimal strings.
 
 > **Background:** Obfuscation is the act of creating source code that is difficult for humans to understand. Many times the code is obfuscated to protect intellectual property or trade secrets, and on other occasions to not lose control of our code, avoiding accidental modifications that could break it.
 The obfuscation technique, unlike code encryption, allows the program to continue running, without the need for a prior decryption procedure.
 
-## Installation
+## Installation.
 ```bash
 # --- 1. Clone this repo ---
 $ git clone https://github.com/nanom/PyObfuscator.git && cd PyObfuscator 
@@ -17,7 +17,7 @@ $ sudo chmod +x py_ofuscator.py
 # --- 3. Create symlink to '/usr/local/bin' so the tool can be used from anywhere ---
 $ sudo ln -s <you_absolute_path>/py_ofuscator.py /usr/local/bin/.
 ```
-## How to use
+## How to use.
 ```shell
 usage: ./py_obfuscator.py [-h] -i INPUT_PATH [-o OUTPUT_DIR] [-v PROGRAM_VARS]
 
@@ -36,21 +36,23 @@ required arguments:
                         Python filename or program directory name.
 ```
 
-## Examples of use
-#### Execute the tool to obfuscate `test.py` python file. 
+## Examples of use.
+### 1. Using list of variable names entered by the user.
+
+* #### Execute the below command to obfuscate the `test.py` file.
 ```bash
 $ ./py_obfuscator.py \
     -i test.py  \
     -o out \
     -v this,is_,a,simple,coded,python,app
 ```
-#### *Input file:*
+* #### *Input file:*
 ```python
 # test.py
 print("Hello World!")
 ```
 
-#### *Output file:*
+* #### *Output file:*
 ```python
 # out/test.py
 import base64, codecs 
@@ -69,7 +71,35 @@ app = \
 eval(compile(base64.b64decode(eval('\x61\x70\x70')).decode('utf-8'),'<app>', 'exec'))
 ```
 
-## Deobfuscation: Reverse Engineering
+### 2. Using random generation of names and number of variables.
+* #### Execute the below command to obfuscate the `test.py` file.
+```bash
+$ ./py_obfuscator.py \
+    -i test.py  \
+    -o out
+```
+* #### *Input file:*
+```python
+# test.py
+print("Hello World!")
+```
+
+* #### *Output file:*
+```python
+# out/test.py
+import base64, codecs 
+jlIVBhc = 'cHJpbnQoI'
+guivUSV = 'khlbGxvIF'
+nSJyhlB = 'qipzkxVFVc'
+idbBK1l = '\x72\x6f\x74\x31\x33' 
+NIUBY9A = \
+	eval('\x6a\x6c\x49\x56\x42\x68\x63') + \
+	eval('\x67\x75\x69\x76\x55\x53\x56') + \
+	eval('\x63\x6f\x64\x65\x63\x73\x2e\x64\x65\x63\x6f\x64\x65\x28\x6e\x53\x4a\x79\x68\x6c\x42\x2c\x69\x64\x62\x42\x4b\x31\x6c\x29')
+eval(compile(base64.b64decode(eval('\x4e\x49\x55\x42\x59\x39\x41')).decode('utf-8'),'<app>', 'exec'))
+```
+
+## Deobfuscation: Reverse Engineering (example [1](#1-using-list-of-variable-names-entered-by-the-user)).
 1. The original code is partitioned and encoded in `base64` between the variables **`this`**, **`is_`**, **`a`**, **`simple`** and  **coded**.
 ```python
 this = 'cHJpb'
