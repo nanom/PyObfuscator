@@ -100,7 +100,7 @@ eval(compile(base64.b64decode(eval('\x4e\x49\x55\x42\x59\x39\x41')).decode('utf-
 ```
 
 ## Deobfuscation: Reverse Engineering (example [1](#1-using-list-of-variable-names-entered-by-the-user)).
-1. The original code is partitioned and encoded in `base64` between the variables **`this`**, **`is_`**, **`a`**, **`simple`** and  **coded**.
+1. The original code is partitioned and encoded in `base64` between the variables **`this`**, **`is_`**, **`a`**, **`simple`** and  **`coded`**.
 ```python
 this = 'cHJpb'
 is_ = 'aDbVx'
@@ -108,9 +108,9 @@ a = 'hlbGx'
 simple = 'vIFdv'
 coded = 'pzkxVFVc'
 ```
-2. The variable **`python`** contains the name of the encoding method in hexadecimal string ('rot13') used to re-encode the content of some above variables, with a probability of .6.
+2. The variable **`python`** contains the name of the encoding method in hexadecimal string used to re-encode the content of some above variables with a probability of .6.
 ```python
-python = '\x72\x6f\x74\x31\x33' 
+python = '\x72\x6f\x74\x31\x33'
 ```
 3. The last variable **`app`**, contains the concatenation of the results of several calls to `eval()`. Each of the inputs to `eval()` are encoded in hexadecimal string.  Specifically the actual decoded arguments are:
 ```python
