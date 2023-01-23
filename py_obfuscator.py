@@ -32,14 +32,9 @@ def getArguments():
 if __name__ == '__main__':
     args = getArguments()
 
-    program_vars = args.get('program_vars')
-    if program_vars is not None:
-        program_vars = [var_name for var_name in program_vars.split(",") if var_name != ""]
-
     ob = Obfuscate(
-        input_path = args.get('input_path'),
-        output_dir_name = args.get('output_dir'),
-        program_vars = program_vars
-        
+        input_path = args['input_path'],
+        output_dir_name = args['output_dir'],
+        program_vars = args['program_vars'].split(",") if args['program_vars'] is not None else None
     )
     ob.execute()

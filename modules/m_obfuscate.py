@@ -46,13 +46,20 @@ class Obfuscate:
         # --- Checking input program_list vars names ---
         if self.program_vars is not None:
 
+            # List normalize
+            self.program_vars = [
+                var_name.strip()
+                for var_name in self.program_vars
+                if var_name.strip() != ""
+            ]
+
             # Checking that each name doesn't start with a numeric character.
-            all_names_are_correctly = True
+            all_correctly = True
 
             for name in self.program_vars:
-                all_names_are_correctly = all_names_are_correctly and name.strip()[0].isalpha()
+                all_correctly = all_correctly and name[0].isalpha()
             
-            if not all_names_are_correctly:
+            if not all_correctly:
                 sys.exit("Error: Variable names entered in `PROGRAM_VARS` parameter must start with an alphabetic character!")
 
             # Checking that list have at least three names
@@ -80,7 +87,10 @@ class Obfuscate:
             directories = self.__recursive_dir_search(self.input_path)
             for d in directories:
                 child_list = [os.path.join(d,e) for e in os.listdir(d)]
-                self.__all_files_path += [e for e in child_list if os.path.isfile(e)]
+                self.__all_files_path += [
+                    e for e in child_list 
+                    if os.path.isfile(e)
+                ]
 
         # 2. Store python files path and copy non python files 
         for s_path in self.__all_files_path:
@@ -125,11 +135,12 @@ class Obfuscate:
         min_n_vars = 1
         max_n_vars = 7
 
+        current_program_vars = []
         if self.program_vars is None:
             n = random.randint(min_n_vars, max_n_vars)
             
             # Generate list of variables name
-            self.program_vars = [
+            current_program_vars = [
                 self.__new_name()
                 for _ in range(0, n) 
                 if n < program_size
@@ -138,19 +149,20 @@ class Obfuscate:
             # Generate random names to `self.encoding_var` and `self.execute_var`
             self.execute_var = self.__new_name()
             self.encoding_var = self.__new_name()
+
         else:
-            self.program_vars = [
-                var_name.strip() 
+            current_program_vars = [
+                var_name 
                 for ith, var_name in enumerate(self.program_vars) 
                 if var_name.strip() != "" and ith < program_size
             ]
 
             # Assign the last 2 names of the self.program_vars to `self.encoding_var` and `self.execute_var`
-            self.encoding_var = self.program_vars[-2]
-            self.execute_var = self.program_vars[-1]
-            self.program_vars = self.program_vars[:-2] 
+            self.encoding_var = current_program_vars[-2]
+            self.execute_var = current_program_vars[-1]
+            current_program_vars = current_program_vars[:-2] 
 
-        return self.program_vars
+        return current_program_vars
     
     def __file_to_string(
         self, 
@@ -183,7 +195,7 @@ class Obfuscate:
             p_str = self.__file_to_string(file_path)
             p_size = len(p_str)
             p_vars = self.__get_program_vars(p_size)
-
+            
             encoder = Encoder(p_vars, self.encoding_method)
             decoder = Decoder(self.output_dir_path, self.encoding_var, self.execute_var)
             
@@ -192,4 +204,4 @@ class Obfuscate:
             
             print(f"File '{file_path}' ... OK")
 
-        print(f"The files have been successfully obfuscated in '{self.output_dir_path}' !")
+        print(f"The files have been successfully obfuscated in '{self.output_dir_path}'!")
